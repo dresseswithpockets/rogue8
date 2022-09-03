@@ -1,5 +1,56 @@
 pico-8 cartridge // http://www.pico-8.com
 version 38
+__lua__
+// p is player table
+// e is enemies array
+// h is the floor hpot, if any
+// f is floor number
+p={x=14,y=14,h=2}
+e={{x=21,y=21}}
+h={x=21,y=14}
+f=0
+
+// todo: handle floor gen
+//   puts: mobs, hpots, exit, walls
+// todo: handle floor exit
+// todo: handle death
+// todo: handle p->e damage
+// todo: handle e->p damage
+
+::_::
+cls()
+
+p.x+=btnp(1)and 7or(btnp(0)and-7or 0)
+p.y+=btnp(2)and-7or(btnp(3)and 7or 0)
+
+p.x=max(14,min(119,p.x))
+p.y=max(14,min(119,p.y))
+
+// hpot pickup
+if h.x==p.x and h.y==p.y then
+	p.h+=1 // do we limit hp?
+	h={x=0,y=-7}
+end
+
+// update & draw enemies
+for a in all(e) do
+	print("🐱",a.x,a.y,2)
+end
+
+// draw hpot
+print("♥",h.x,h.y,3)
+
+// draw player
+print("웃",p.x,p.y,3)
+
+// draw hp
+for i=0,p.h do
+	print("♥",2+i*7,119,7)
+end
+
+// draw floor number
+print("f"..f,2,2)
+flip()goto _
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
