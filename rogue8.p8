@@ -77,28 +77,31 @@ end
 
 ::d::
 cls()
-//draw the room
-rect(7,7,7*z.x+7,7*z.y+7,5)
 //iterate through the array
-print("웃",7*p.x,7*p.y,3)
-for x=1,z.x do
- for y=1,z.y do
-  e = t[x][y]
-  if e == 2 then
-   print("🐱",7*x,7*y,2)
-  elseif e == 3 then
-  	print("♥",7*x,7*y,3)
-  elseif e == 4 then
-   print("▤",7*x,7*y,10)
+?"웃",7*(p.x-1),7*(p.y-1),2
+for x=0,z.x-1 do
+ for y=0,z.y-1 do
+  e=t[x+1][y+1]
+  if e==0 then
+   rectfill(7*x,7*y,7*x+7,7*y+7,5)
+  elseif e==2 then
+   if a then
+   	// todo enemy ai
+   end
+   ?"🐱",7*x,7*y,2
+  elseif e==3 then
+  	?"♥",7*x,7*y,3
+  elseif e==4 then
+   ?"▤",7*x,7*y,10
   end
  end
 end
 // draw hp
 for i=0,p.h do
-	print("♥",2+i*7,119,7)
+	?"♥",2+i*7,119,7
 end
 // draw floor number
-print("f"..f,50,119)
+?"f"..f,50,119
 flip()goto _
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
