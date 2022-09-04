@@ -17,11 +17,20 @@ z={x=18,y=16}
 // todo: handle e->p damage
 // todo: enemy movement
 // todo: sfx on damage
-::f::
+-- bug: if exit is on wall spot
+--  and player exits, error on
+--  next generation
+::q::
 for x=1,z.x do
-	t[x] = {}
+	t[x]={}
  for y=1,z.y do
-  t[x][y] = -1
+  t[x][y]=-1
+  -- put wall on edges, and
+  -- avoid putting a wall over
+  -- player pos
+  if (p.x!=x or p.y!=y)and(x==1or x==z.x or y==1or y==z.y) then
+   t[x][y]=0
+  end
  end
 end
 t[4][6] = 2
