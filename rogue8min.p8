@@ -1,10 +1,9 @@
 pico-8 cartridge // http://www.pico-8.com
 version 38
 __lua__
-p={x=14,y=14,h=2}e={{x=21,y=21}}h={x=21,y=14}f=0::_::cls()p.x+=btnp(1)and 7or(btnp(0)and-7or 0)p.y+=btnp(2)and-7or(btnp(3)and 7or 0)p.x=max(14,min(119,p.x))p.y=max(14,min(119,p.y))if h.x==p.x and h.y==p.y then p.h+=1h={x=0,y=-7}end
-for a in all(e) do print("🐱",a.x,a.y,2)end
-print("♥",h.x,h.y,3)print("웃",p.x,p.y,3)for i=0,p.h do print("♥",2+i*7,119,7)end
-print("f"..f,2,2)flip()goto _
+p={x=3,y=3,h=2}t={}f=0z={x=17,y=15}
+::f::for x=1,z.x do t[x] = {}for y=1,z.y do t[x][y] = -1end end
+t[4][6] = 2t[7][7] = 3t[10][9] = 4::_::xd = 0 yd = 0 if btnp(0) then xd = -1elseif btnp(1) then xd = 1elseif btnp(2) then yd = -1elseif btnp(3) then yd = 1else goto d end goto t::d::cls()rect(7,7,7*z.x+7,7*z.y+7,5)print("웃",7*p.x,7*p.y,3)for x=1,z.x do for y=1,z.y do e = t[x][y]if e == 2 then print("🐱",7*x,7*y,2)elseif e == 3 then print("♥",7*x,7*y,3)elseif e == 4 then print("▤",7*x,7*y,10)end end end for i=0,p.h do print("♥",2+i*7,119,7)end print("f"..f,50,119)flip()goto _::t::move = 1xd += p.x yd += p.y e = t[xd][yd]if e == 2 then t[xd][yd] = -1move = nil elseif e == 3 then t[xd][yd] = -1p.h += 1elseif e == 4 then f += 1goto f end if move then p.x = max(1,min(z.x,xd))p.y = max(1,min(z.y,yd))end goto d
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
