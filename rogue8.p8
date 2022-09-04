@@ -39,16 +39,14 @@ t[7][7]=3
 t[rnd(z.x-2)\1+1][rnd(z.y-2)\1+1]=4
 
 ::_::
-xd = 0
-yd = 0
-//check for player input
-if btnp(0) then xd = -1
- elseif btnp(1) then xd = 1
- elseif btnp(2) then yd = -1
- elseif btnp(3) then yd = 1
- //if no player input,
- //continue to draw
- else goto d
+-- xd is move x
+-- yd is move y
+-- a is true if action done
+xd=btnp(0)and-1or(btnp(1)and 1or 0)
+yd=btnp(2)and-1or(btnp(3)and 1or 0)
+a=xd!=0or yd!=0
+if xd==0and yd==0 then
+ goto d
 end
 goto t
 ::d::
