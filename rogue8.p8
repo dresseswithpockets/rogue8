@@ -33,9 +33,11 @@ for x=1,z.x do
   end
  end
 end
-t[4][6] = 2
-t[7][7] = 3
-t[10][9] = 4
+t[4][6]=2
+t[7][7]=3
+-- put exit at rand location
+t[rnd(z.x-2)\1+1][rnd(z.y-2)\1+1]=4
+
 ::_::
 xd = 0
 yd = 0
