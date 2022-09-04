@@ -48,7 +48,33 @@ a=xd!=0or yd!=0
 if xd==0and yd==0 then
  goto d
 end
-goto t
+
+m=1
+//store the new position
+xd+=p.x
+yd+=p.y
+e=t[xd][yd]
+//check for entity type at
+//new position
+if e==0 then
+ m=nil
+elseif e==2 then
+ t[xd][yd]=-1
+ m=nil
+elseif e==3 then 
+ t[xd][yd]=-1
+ p.h+=1
+elseif e==4 then
+ f+=1
+ p.x=xd
+ p.y=yd
+ goto q
+end
+if m then
+ p.x=xd
+ p.y=yd
+end
+
 ::d::
 cls()
 //draw the room
@@ -74,32 +100,6 @@ end
 // draw floor number
 print("f"..f,50,119)
 flip()goto _
-//turn logic
-::t::
-move = 1
-//store the new position
-xd += p.x
-yd += p.y
-e = t[xd][yd]
-//check for entity type at
-//new position
-if e == 2 then
- t[xd][yd] = -1
- move = nil
-elseif e == 3 then 
- t[xd][yd] = -1
- p.h += 1
-elseif e == 4 then
- f += 1
- goto f
-end
-if move then
-//clamp player location
- p.x = max(1,min(z.x,xd))
- p.y = max(1,min(z.y,yd))
-end
-//then return to the draw loop
-goto d
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
