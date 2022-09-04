@@ -1,15 +1,14 @@
 pico-8 cartridge // http://www.pico-8.com
 version 38
 __lua__
-// p is player table
-// e is enemies array
-// w 
+// p is player hp
+// t is tiles array
 // f is floor number
 // z is floor size
 p={x=3,y=3,h=2}
 t={}
 f=0
-z={x=17,y=15}
+z={x=18,y=16}
 
 // todo: handle floor gen
 //   puts: mobs, hpots, exit, walls
