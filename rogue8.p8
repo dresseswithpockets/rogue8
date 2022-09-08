@@ -23,7 +23,7 @@ g=0
 --todo: sfx
 ::q::
 for x=1,z.x do
-	t[x]={}
+ t[x]={}
  for y=1,z.y do
   t[x][y]=-1
   --put wall on edges, and
@@ -129,7 +129,7 @@ for x=1,z.x do
      xd = x+sgn(p.x-x)
      yd = y
     else
-   	 xd = x
+     xd = x
      yd = y+sgn(p.y-y)
     end
     --if enemy catches player
@@ -139,21 +139,21 @@ for x=1,z.x do
     --other check for empty
     --space to move to
     elseif t[xd][yd] == -1 then
-   	 t[x][y] = -1
-   	 if xd > x or yd > y then
-   	  --if the enemy would be
-   	  --placed ahead in the table
-   	  --then set it to a
-   	  --placeholder to prevent
-   	  --double actions
-   	  t[xd][yd] = -2
-   	 else
-   	  t[xd][yd] = 2
-					end
+     t[x][y] = -1
+     if xd > x or yd > y then
+      --if the enemy would be
+      --placed ahead in the table
+      --then set it to a
+      --placeholder to prevent
+      --double actions
+      t[xd][yd] = -2
+     else
+      t[xd][yd] = 2
+     end
     end
    end
   elseif e==3 then
-  	?"♥",r*x,r*y,3
+   ?"♥",r*x,r*y,3
   elseif e==4 then
    ?"▤",r*x,r*y,4
   elseif e==5 then
@@ -168,9 +168,9 @@ for x=1,z.x do
 end
 --draw hp
 for i=0,5 do
-	?"♥",2+i*7,119,6
-	if i<=p.h then ?"♥",2+i*7,119,8
-	end
+ ?"♥",2+i*7,119,6
+ if i<=p.h then ?"♥",2+i*7,119,8
+ end
 end
 --draw floor number
 ?"f"..f,90,119
