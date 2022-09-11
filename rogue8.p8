@@ -7,12 +7,14 @@ __lua__
 --z is floor size
 --r is pixels per space
 --g is gold
-p={x=3,y=3,h=2}
+p={x=3,y=3,h=2,n=0}
 t={}
 f=0
 z={x=18,y=18}
 r=6
 g=0
+--animation flag
+n=nil
 
 --entities:
 -- -1:empty, 0:wall, 1:gold
@@ -20,7 +22,12 @@ g=0
 -- 5:treasure
 
 --todo: handle death
---todo: sfx
+--todo: high score (gold)
+--todo: enemy variants
+--todo: balance room gen
+--todo: balance enemy ai
+--todo: fix wall graphix
+--todo: polish ui
 ::q::
 for x=1,z.x do
 	t[x]={}
@@ -59,13 +66,25 @@ while try do
 end
 
 ::_::
+--exit animation flag if done
+--(please optimze)
+if p.n==0 then
+ n=nil
+end
+--action flag
 a=1
---xd is move x
---yd is move y
---a is true if action done
-xd=btnp(0)and-1or(btnp(1)and 1or 0)
-yd=btnp(2)and-1or(btnp(3)and 1or 0)
-a=xd!=0or yd!=0
+--prevent input during animtion
+if n then
+ xd=0
+ yd=0
+else
+ --xd is move x
+ --yd is move y
+ xd=btnp(0)and-1or(btnp(1)and 1or 0)
+ yd=btnp(2)and-1or(btnp(3)and 1or 0)
+ --a is true if action done
+ a=xd!=0or yd!=0
+end
 --escape actions if no input
 if xd==0and yd==0 then
  a=nil
@@ -84,6 +103,7 @@ if e==0 then
 elseif e==1 then
  t[xd][yd]=-1
  g+=1
+ ?"\av2a"
 elseif e==2 or e==9 then
  if rnd(3) < 1 then
   t[xd][yd]=-1
@@ -91,18 +111,22 @@ elseif e==2 or e==9 then
   t[xd][yd]=1
  end
  m=nil
+ ?"\ai3v3g2.c3b2"
 elseif e==3 then 
  t[xd][yd]=-1
- p.h = min(6,p.h+1)
+ p.h = min(5,p.h+1)
+ ?"\as7abcdef"
 elseif e==4 then
  f+=1
  p.x=xd
  p.y=yd
+ ?"\ai6g3.g2.g1"
  goto q
 elseif e==5 then
  t[xd][yd]=-1
  g+=5
  m=nil
+ ?"\ae#.g#"
 end
 if m then
  p.x=xd
@@ -111,8 +135,15 @@ end
 
 ::d::
 cls()
+--draw player/animate
+if n then
+ c=p.n%6==0and 8or 2
+ p.n-=1
+else
+ c=2
+end
+?"웃",r*(p.x),r*(p.y),c
 --iterate through the array
-?"웃",r*(p.x),r*(p.y),2
 for x=1,z.x do
  for y=1,z.y do
   e=t[x][y]
@@ -135,7 +166,11 @@ for x=1,z.x do
     --if enemy catches player
     --deal damage
     if xd == p.x and yd == p.y then
-     p.h -= 1
+     p.h-=1
+     --assign animation
+     p.n=24
+     n=1
+     ?"\af-2g1"
     --other check for empty
     --space to move to
     elseif t[xd][yd] == -1 then
@@ -173,9 +208,9 @@ for i=0,5 do
 	end
 end
 --draw floor number
-?"f"..f,90,119
+?"f"..f,90,119,6
 --draw gold count
-?"g"..g,50,119
+?"g"..g,50,119,9
 flip()goto _
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
