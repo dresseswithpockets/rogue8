@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 38
 __lua__
-p={x=3,y=3,h=2,n=0}t={}f=0z={x=18,y=18}r=6g=0n=nil
+p={x=3,y=3,h=2}t={}f=0z={x=18,y=18}r=6g=0n=0
 ::q::
 for x=1,z.x do
 	t[x]={}
@@ -27,16 +27,15 @@ while try do
   try=nil
  end
 end
-
 ::_::
-if p.n==0then
- n=nil
-end
 a=1
-if n then
+if n>0then
  xd=0
  yd=0
 else
+ if p.h<0then
+  goto o
+ end
  xd=btnp(0)and-1or(btnp(1)and 1or 0)
  yd=btnp(2)and-1or(btnp(3)and 1or 0)
  a=xd!=0or yd!=0
@@ -45,6 +44,7 @@ if xd==0and yd==0then
  a=nil
  goto d
 end
+
 m=1
 xd+=p.x
 yd+=p.y
@@ -55,8 +55,8 @@ elseif e==1then
  t[xd][yd]=-1
  g+=1
  ?"\av2a"
-elseif e==2or e==9then
- if rnd(3)<1then
+elseif e==2 or e==9then
+ if rnd(3) < 1then
   t[xd][yd]=-1
  else
   t[xd][yd]=1
@@ -83,24 +83,28 @@ if m then
  p.x=xd
  p.y=yd
 end
+
 ::d::
 cls()
-if n then
- c=p.n%6==0and 8or 2
- p.n-=1
+--draw player/animate
+if n>0 then
+ c=n%6==0and 8or 2
+ n-=1
 else
  c=2
 end
 ?"웃",r*(p.x),r*(p.y),c
 for x=1,z.x do
  for y=1,z.y do
+  v=r*x
+  w=r*y
   e=t[x][y]
-  if e==0then
-   rectfill(r*x,r*y,r*(x+1),r*(y+1),5)
+  if e==0 then
+   rectfill(v,w,v+5,w+5,5)
   elseif e==1then
-   ?"◆",r*x,r*y,10
+   ?"◆",v,w,10
   elseif e==2then
-   ?"🐱",r*x,r*y,2
+   ?"🐱",v,w,2
    if a then
     if rnd(2)>1then
      xd=x+sgn(p.x-x)
@@ -111,10 +115,9 @@ for x=1,z.x do
     end
     if xd==p.x and yd==p.y then
      p.h-=1
-     p.n=24
-     n=1
+     n=24
      ?"\af-2g1"
-    elseif t[xd][yd]==-1 then
+    elseif t[xd][yd]==-1then
    	 t[x][y]=-1
    	 if xd>x or yd>y then
    	  t[xd][yd]=-2
@@ -124,25 +127,28 @@ for x=1,z.x do
     end
    end
   elseif e==3then
-  	?"♥",r*x,r*y,3
+  	?"♥",v,w,3
   elseif e==4then
-   ?"▤",r*x,r*y,4
+   ?"▤",v,w,4
   elseif e==5then
-   ?"★",r*x,r*y,9
+   ?"★",v,w,9
   elseif e==-2then
-   ?"🐱",r*x,r*y,2
+   ?"🐱",v,w,2
    t[x][y]=2
   end
  end
 end
-for i=0,5do
-	?"♥",2+i*7,119,6
-	if i<=p.h then?"♥",2+i*7,119,8
-	end
-end
+rectfill(0,114,128,128,1)
+?"\*6♥",2,119,6
+?"\*"..(p.h+1).."♥",2,119,8
 ?"f"..f,90,119,6
-?"g"..g,50,119,9
+?"g"..g,54,119,9
 flip()goto _
+::o::
+?"game over",40,64,8
+?"score",40,74,6
+?g.."g",70,74,9
+goto o
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
