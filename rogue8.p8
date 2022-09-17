@@ -10,24 +10,26 @@ __lua__
 p={x=3,y=3,h=2}
 t={}
 f=0
-z={x=18,y=18}
+z={x=19,y=18}
 r=6
 g=0
 --animation flag
 n=0
+--enemy hurt sound
+s1="\ai3v3g2.c3b2"
+--boss step counter
+tr=0
 
 --entities:
 -- -1:empty, 0:wall, 1:gold
 -- 2:enemy, 3:health, 4:stairs
 -- 5:treasure
 
---todo: handle death
---todo: high score (gold)
---todo: enemy variants
---todo: balance room gen
---todo: balance enemy ai
---todo: fix wall graphix
---todo: polish ui
+--\/\/ishlist
+--enemy variants
+--balance room gen
+--room variants
+--balance enemy ai
 ::q::
 for x=1,z.x do
 	t[x]={}
@@ -38,16 +40,15 @@ for x=1,z.x do
   --player pos
   if (p.x!=x or p.y!=y)and(x==1or x==z.x or y==1or y==z.y) then
    t[x][y]=0
-  --have a random chance
-  --(increasing per floor)
-  --to spawn an enemy
-  elseif rnd(250)<1+f/2 then
+  --difficulty level
+  d=flr(f/5)
+  elseif rnd(250)<1+d then
    t[x][y]=-2
   --or to spawn a health pot
   elseif rnd(450)<1 then
    t[x][y]=3
   --even rarer to spawn a chest
-  elseif rnd(1200)<1+f/2 then
+  elseif rnd(1200)<1+d then
    t[x][y]=5
   end
  end
@@ -60,8 +61,14 @@ while try do
  rx=rnd(z.x-2)\1+1
  ry=rnd(z.y-2)\1+1
  if t[rx][ry]==-1 then
-  t[rx][ry]=4
-  try=nil
+ --every 10th floor, instead
+ --spawn a boss
+  if f%10==0 then
+   t[rx][ry]=12+d/2
+  else
+   t[rx][ry]=4
+  end
+   try=nil
  end
 end
 
@@ -105,11 +112,7 @@ elseif e==1 then
  g+=1
  ?"\av2a"
 elseif e==2 or e==9 then
- if rnd(3) < 1 then
-  t[xd][yd]=-1
- else
-  t[xd][yd]=1
- end
+ t[xd][yd]=1*sgn(rnd(4)-2)
  m=nil
  ?"\ai3v3g2.c3b2"
 elseif e==3 then 
@@ -124,13 +127,18 @@ elseif e==4 then
  goto q
 elseif e==5 then
  t[xd][yd]=-1
- g+=5
+ g+=e
  m=nil
  ?"\ae#.g#"
+elseif e>10 then
+ t[xd][yd]=e-1
+ m=nil
+ ?"\ai3v3g2.c3b2"
 end
 if m then
+ --disallows diagonal movement (???)
+ p.y=xd!=p.x and p.y or yd
  p.x=xd
- p.y=yd
 end
 
 ::d::
@@ -144,6 +152,7 @@ else
 end
 ?"웃",r*(p.x),r*(p.y),c
 --iterate through the array
+m=1
 for x=1,z.x do
  for y=1,z.y do
   v=r*x
@@ -168,7 +177,7 @@ for x=1,z.x do
     --if enemy catches player
     --deal damage
     if xd==p.x and yd==p.y then
-     p.h-=1
+     p.h=max(-1,p.h-1)
      --assign animation
      n=24
      ?"\af-2g1"
@@ -199,6 +208,28 @@ for x=1,z.x do
    --placeholder
    ?"🐱",v,w,2
    t[x][y]=2
+  elseif e==10 then
+  --if dead boss, turn into a
+  --stairs
+   t[x][y]=4
+  elseif e>10 then
+   ?"😐",v,w,11
+   --randomize movement
+   xd=x+rnd(3)\1-1
+   yd=y+rnd(3)\1-1
+   --only continue if action,
+   --free space, and the first
+   --movement of this turn
+   if a and t[xd][yd]==-1and m then
+    tr+=1
+    --boss will only spawn enemy
+    --once every 3 steps
+    t[x][y]=tr%3==0and e or-1
+    t[xd][yd]=tr%3==0and-2 or e
+    --flag boss as a tired boy
+    --to prevent double actions
+    m=nil
+   end
   end
  end
 end
